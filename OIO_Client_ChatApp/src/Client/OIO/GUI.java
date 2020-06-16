@@ -37,27 +37,25 @@ public class GUI extends JFrame {
         this.setContentPane(panel1);
         this.pack();
 
-
         //socket ready
         this.serverSocket = serverSocket;
         this.myName = myName;
         new ChatClientReceiveThread(serverSocket).start(); //read thread
 
-        envelope.addActionListener(new ActionListener() { //암호화 mouse push event
+        envelope.addActionListener(new ActionListener() { //암호화버튼 push event
             @Override
             public void actionPerformed(ActionEvent e) {
                 AES256Cipher aes256Cipher = AES256Cipher.getInstance();
                 String key = aes256Cipher.createKey(); //유저 키
-                String mainKey = "abcdefghijklmnopqrstuvwxyz123456"; //비밀키 복호화키
                 JOptionPane.showInputDialog(panel1,
                         "생성된 암호키 입니다.", key);
 
                 String data = chatInput.getText();
 
                 try {
-                    //Todo 키 암호화
-                    key = aes256Cipher.AES_Encode(key, mainKey);
-                    //Todo 데이터 암호화
+                    //키 암호화
+                    key = aes256Cipher.AES_Encode(key, AES256Cipher.mainKey);
+                    //데이터 암호화
                     data = aes256Cipher.AES_Encode(data); //암호화
                 } catch (UnsupportedEncodingException ex) {
                     ex.printStackTrace();
@@ -79,36 +77,6 @@ public class GUI extends JFrame {
                 }
                 chatInput.setText(data);
                 chatInput.requestFocus();
-
-                //여기서부터 서버에서 처리.
-//                data = data.split(":")[1];
-//
-//                String key2 = data.split("@")[0];
-//                String data2 = data.split("@")[1];
-//                System.out.println(key2); //키 추출
-//                System.out.println(data2); //복호문 추출
-//
-//                try {
-//                    key2 = aes256Cipher.AES_Decode(key2, mainKey); //비밀키 복호화
-//                    data2 = aes256Cipher.AES_Decode(data2, key2); //데이터 복호화
-//                    System.out.println(key2);
-//                    System.out.println(data2);
-//                } catch (UnsupportedEncodingException ex) {
-//                    ex.printStackTrace();
-//                } catch (NoSuchAlgorithmException ex) {
-//                    ex.printStackTrace();
-//                } catch (NoSuchPaddingException ex) {
-//                    ex.printStackTrace();
-//                } catch (InvalidKeyException ex) {
-//                    ex.printStackTrace();
-//                } catch (InvalidAlgorithmParameterException ex) {
-//                    ex.printStackTrace();
-//                } catch (IllegalBlockSizeException ex) {
-//                    ex.printStackTrace();
-//                } catch (BadPaddingException ex) {
-//                    ex.printStackTrace();
-//                }
-
             }
         });
 
@@ -179,6 +147,7 @@ public class GUI extends JFrame {
         }
     }
 
+    //1:1채팅여부 체크
     public boolean whisperCheck(String data) {
         try {
             String value = data.split(":")[0];
@@ -192,6 +161,7 @@ public class GUI extends JFrame {
         }
     }
 
+    //암호화여부 체크
     public boolean envelopeCheck(String data) {
         try {
             String value = data.split(":")[0];
@@ -205,7 +175,7 @@ public class GUI extends JFrame {
         }
     }
 
-    //Inner Socket Receive Thread
+    //receive event thread
     private class ChatClientReceiveThread extends Thread {
         Socket socket = null;
 
@@ -232,7 +202,8 @@ public class GUI extends JFrame {
             }
         }
 
-        private String strAPI(String data) { //receive Data
+        //서버 수신 데이터 처리
+        private String strAPI(String data) {
             String value = data.split(":")[0];
             String nickname, message;
             Logger.getGlobal().info("strAPI -> " + data);
@@ -261,7 +232,7 @@ public class GUI extends JFrame {
         }
     }
 
-    //send event
+    //send event thread
     private class ChatClientSendMessageThread extends Thread {
         //send event
         private void sendMessage(String data) {

@@ -9,13 +9,15 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import Client.OIO.util.impl.AES256CipherImpl;
 import org.apache.commons.codec.binary.Base64;
 
-public class AES256Cipher {
+public class AES256Cipher implements AES256CipherImpl {
 
     private static volatile AES256Cipher INSTANCE;
 
-    private String secretKey = "abcdefghijklmnopqrstuvwxyz123456"; //need 32bit
+    public static String mainKey = "abcdefghijklmnopqrstuvwxyz123456"; //사용자 비밀키 암호화를 위한 서버와의 공유키.
+    private String secretKey = "abcdefghijklmnopqrstuvwxyz123456"; //기본값 사용자 비밀키. createKey() 함수로 키값 변경.
     String IV = ""; //16bit
 
     public String createKey() {
@@ -88,71 +90,23 @@ public class AES256Cipher {
         return enStr;
     }
 
-    //복호화
-    public String AES_Decode(String str, String key) throws UnsupportedEncodingException,
-            NoSuchAlgorithmException
-            , NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-            IllegalBlockSizeException, BadPaddingException {
-        byte[] keyData = key.getBytes();
-        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
-        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        c.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes("UTF-8")));
+//    //복호화
+//    public String AES_Decode(String str, String key) throws UnsupportedEncodingException,
+//            NoSuchAlgorithmException
+//            , NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
+//            IllegalBlockSizeException, BadPaddingException {
+//        byte[] keyData = key.getBytes();
+//        SecretKey secureKey = new SecretKeySpec(keyData, "AES");
+//        Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
+//        c.init(Cipher.DECRYPT_MODE, secureKey, new IvParameterSpec(IV.getBytes("UTF-8")));
+//
+//        byte[] byteStr = Base64.decodeBase64(str.getBytes());
+//
+//        return new String(c.doFinal(byteStr), "UTF-8");
+//    }
 
-        byte[] byteStr = Base64.decodeBase64(str.getBytes());
-
-        return new String(c.doFinal(byteStr), "UTF-8");
-    }
-
-    public static void main(String[] args) {
-        AES256Cipher a256 = AES256Cipher.getInstance();
-        String key = a256.createKey();
-
-        String data = "김동연김동연김동연김동연짱짱맨";
-        String encodeData = null;
-        try {
-            encodeData = a256.AES_Encode(data);
-            System.out.println(encodeData);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-        encodeData = "envelope:" + encodeData;
-        System.out.println(encodeData);
-        System.out.println(encodeData.split(":")[0]);
-        System.out.println(encodeData.split(":")[1]);
-        encodeData = encodeData.split(":")[1];
-
-        String decodeData = null;
-        try {
-            decodeData = a256.AES_Decode(encodeData, key);
-            System.out.println(decodeData);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-
-
+    @Override
+    public String AES_Decode(String str, String key) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+        return null;
     }
 }
