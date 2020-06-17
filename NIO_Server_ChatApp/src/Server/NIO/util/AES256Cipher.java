@@ -55,12 +55,16 @@ public class AES256Cipher implements AES256CipherImpl {
     }
 
     @Override
-    public String AES_Encode(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+    public String AES_Encode(String str) throws UnsupportedEncodingException, NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
+            IllegalBlockSizeException, BadPaddingException {
         return null;
     }
 
     @Override
-    public String AES_Encode(String str, String mainKey) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+    public String AES_Encode(String str, String mainKey) throws UnsupportedEncodingException,
+            NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
+            , IllegalBlockSizeException, BadPaddingException {
         return null;
     }
 //    //암호화

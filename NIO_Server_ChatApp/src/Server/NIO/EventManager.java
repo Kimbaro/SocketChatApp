@@ -56,11 +56,7 @@ public class EventManager implements Runnable {
                 (new StringBuilder(sc.socket().getInetAddress().toString())).append(":").append(sc.socket().getPort()).toString();
         System.out.println("address : " + address);
         sc.configureBlocking(false);
-//        sc.register(selector, SelectionKey.OP_READ, address);
-//        sc.write(welcomeBuf); test0
-        //kimbaro -- test 0
-//        sc.write(welcomeBuf);
-//        welcomeBuf.rewind();
+
         SelectionKey newClient = sc.register(selector, SelectionKey.OP_READ, address);
         System.out.println("accepted connection from: " + address);
     }
