@@ -1,8 +1,9 @@
 # SocketChatApp
-Practice-  Chatting App
+Practice-  Simple Chatting App
 
 Preview
 ===================================
 
-NIO (Non-Blocking Input/Output) based Chatting Server \n
+NIO (Non-Blocking Input/Output) based Chatting Server
+
 OIO (Old Input/Output) based Chatting Client
